@@ -1,0 +1,61 @@
+name: "テスト: デプロイ承認フロー"
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "デプロイ先環境"
+        required: true
+        type: choice
+        options:
+          - dev
+          - staging
+          - production
+      message:
+        description: "デプロイメッセージ（任意）"
+        required: false
+        default: "通常のデプロイ"
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-test:
+    name: "${{ inputs.environment }} へのテストデプロイ"
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: デプロイ情報の表示
+        run: |
+          echo "================================"
+          echo "🚀 デプロイ開始"
+          echo "================================"
+          echo "環境: ${{ inputs.environment }}"
+          echo "実行者: ${{ github.actor }}"
+          echo "メッセージ: ${{ inputs.message }}"
+          echo "実行時刻: $(date)"
+          echo "================================"
+
+      - name: デプロイ処理のシミュレーション (10秒)
+        run: |
+          echo "📦 パッケージの準備中..."
+          sleep 3
+          echo "⚙️  設定ファイルの読み込み中..."
+          sleep 3
+          echo "🔄 デプロイを実行中..."
+          sleep 4
+
+      - name: デプロイ完了
+        run: |
+          echo "================================"
+          echo "✅ デプロイが正常に完了しました"
+          echo "================================"
+          echo "環境: ${{ inputs.environment }}"
+          echo "ステータス: SUCCESS"
+          echo "================================"
+
+      - name: デプロイ後の確認
+        run: |
+          echo "🔍 デプロイ後のヘルスチェック..."
+          echo "✓ サービスが正常に起動しています"
+          echo "✓ 全ての接続テストが成功しました"
